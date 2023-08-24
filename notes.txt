@@ -1,0 +1,1 @@
+https://wiki.deckbrew.xyz/en/api-docs/decky-frontend-lib/deck/components/SteamClient#gameid

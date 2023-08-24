@@ -1,6 +1,21 @@
 {
     "version": "2.0.0",
     "tasks": [
+        //Dependency setup task
+        {
+            "label": "depsetup",
+            "type": "shell",
+            "group": "none",
+            "detail": "Install depedencies for basic setup",
+            "linux": {
+                "command": "${workspaceFolder}/.vscode/setup.sh",
+            },
+            // // placeholder for windows scripts, not currently planned
+            // "windows": {
+            //     "command": "call -c ${workspaceFolder}\\.vscode\\setup.bat",
+            // },
+            "problemMatcher": []
+        },
         // OTHER
         {
             "label": "checkforsettings",
@@ -87,6 +102,20 @@
                 "deploy",
                 "chmodfolders"
             ],
+            "problemMatcher": []
+        },
+        //BUILD TASKS
+        {
+            "label": "cli-build",
+            "group": "build",
+            "detail": "Build plugin with CLI",
+            "linux": {
+                "command": "${workspaceFolder}/.vscode/build.sh",
+            },
+            // // placeholder for windows logic, not currently planned
+            // "windows": {
+            //     "command": "call ${workspaceFolder}\\.vscode\\build.bat",
+            // },
             "problemMatcher": []
         },
         // ALL-IN-ONE

@@ -3,11 +3,13 @@ import logging
 import os
 import re
 from pathlib import Path
+import json
 
 plugin_dir = Path(os.path.dirname(os.path.realpath(__file__)))
 config_dir = (Path(plugin_dir) / "../../settings/decky-cloud-save").resolve()
 
 rclone_bin = plugin_dir / "rclone"
+ludusavi_bin = plugin_dir / "ludusavi"
 rclone_cfg = config_dir / "rclone.conf"
 
 cfg_syncpath_includes_file = config_dir / "sync_paths.txt"
@@ -16,7 +18,7 @@ cfg_syncpath_filter_file = config_dir / "sync_paths_filter.txt"
 cfg_property_file = config_dir / "plugin.properties"
 
 logger = logging.getLogger()
-logger.setLevel(logging.INFO)
+logger.setLevel(logging.DEBUG)
 
 
 async def _get_url_from_rclone_process(process: asyncio.subprocess.Process):
@@ -124,9 +126,20 @@ class Plugin:
             l = f.readlines()
             return l[1]
 
-#
+    async def get_ludusavi_games(self):
+        logger.debug("executing get_ludusavi_games()")
+        logger.debug(f"running comand: {ludusavi_bin} backup --api --preview")
+        await asyncio.subprocess.create_subprocess_exec(ludusavi_bin, *["backup", "--api", "--preview"])
+        output = await asyncio.subprocess.STDOUT
+        logger.debug(output)
+        jsondata = json.loads(output)
+        logger.debug(jsondata["overall"]["totalGames"])
+        logger.debug(list(jsondata["games"].keys()))
+
+
 
     async def sync_now(self):
+        logger.debug(rclone_bin, rclone_cfg, ludusavi_bin)
         logger.debug("Executing: sync_now()")
 
         if _get_config()[1][1] == "true":
