@@ -128,8 +128,7 @@ class Plugin:
 
     async def sync_now(self):
         logger.debug("Executing: sync_now()")
-        destination_path = next((x[1] for x in _get_config() if x[0] == "destination_directory"), "decky-cloud-save")
-                
+
         if _get_config()[1][1] == "true":
             sync_command = "bisync"
             logger.debug("using bisync")
@@ -138,9 +137,8 @@ class Plugin:
             logger.debug("using copy")
 
             destination_path = next((x[1] for x in _get_config() if x[0] == "destination_directory"), "decky-cloud-save")
-        
-        logger.debug("Running command: %s %s --filter-from %s / backend:%s --copy-links", rclone_bin, sync_command, cfg_syncpath_filter_file, destination_path)
 
+        logger.debug("Running command: %s %s --filter-from %s / backend:%s --copy-links", rclone_bin, sync_command, cfg_syncpath_filter_file, destination_path)
         self.current_sync = await asyncio.subprocess.create_subprocess_exec(rclone_bin, *[sync_command, "--filter-from", cfg_syncpath_filter_file, "/", f"backend:{destination_path}", "--copy-links"])
 
     async def sync_now_probe(self):
